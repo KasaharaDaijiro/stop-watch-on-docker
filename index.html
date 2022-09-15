@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang=""ja>
+<head>
+    <meta charset=" "UTF-8>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOP-WATCH by Daijiro</title> 
+    <style>
+        body {
+        font-family: "Lucida Console", Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div id="time">00:00:00.000</div>
+    <div>
+        <input id="start" type="button" value="start">
+        <input id="stop" type="button" value="stop">
+        <input id="reset" type="button" value="reset">
+    </div>
+
+    <script>
+        const timeElement = document.getElementById('time');
+        const start = document.getElementById('start');
+        const stop = document.getElementById('stop');
+        const reset = document.getElementById('reset');
+
+        //　経過時間のミリ秒
+        let elapsed = 0;
+
+        let intervalId =null;
+
+        function updateTime(){
+            //number型になっている
+            //時刻を指定の形式に直す
+            const ms = elapsed % 1000;
+            const s = Math.floor(elapsed /1000);
+            const minuite = Math.floor(elapsed / (1000*60)) % 60;
+            const hour = Math.floor(elapsed /(1000*60*60));
+
+            //String型にする
+            const msStr =ms.toString().padStart(3,'0');
+            const sStr = s.toString().padStart(2, '0');
+            const mStr = minuite.toString().padStart(2, '0');
+            const hStr = hour.toString().padStart(2, '0');
+
+            //画面に表示させる
+            timeElement.innerHTML = `${hStr}:${mStr}:${sStr}.${msStr}`;
+        }
+
+        //第一引数：イベントの種類　第二引数：関数　第三引数：true or false
+        start.addEventListener('click', function(e){
+            //複数回startを押したときに最初の1回以外を反映しないようにするため
+            if(intervalId !== null){return;}
+            let pre = new Date();
+            intervalId = setInterval(function(){
+                const now =new Date();
+                elapsed += now - pre;
+                pre = now;
+                updateTime();
+            }, 10);
+            
+        });
+
+        stop.addEventListener('click', function(e){
+            //intervalIdに入っていればclearする。これは複数回startすると最後のstartがintervalに格納されておりタイマーをstopできないため
+            clearInterval(intervalId);
+            intervalId=null;
+        });
+
+        reset.addEventListener('click', function(e){
+            //時間リセット
+            elapsed = 0;
+            //画面に指定の形式で反映
+            updateTime();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+version: '3'
+services:
+  httpd:
+    image: httpd:latest
+    container_name: httpd-html
+    build: .
+    ports:
+      - 8080:80
+    #volume:
+      #- "./html/index.html:/usr/local/apache2/htdocs/"
+
+
+#09-14
+#docker container run -d -p 8082:80 -v "/Users/daijiro/Desktop/JavaScript/stop-watch-docker/html:/usr/local/apache2/htdocs/" httpd
+#上記commandでうまく行った、これをdocker-copose.ymlやDockerfileにしたい。
+
+#09-15
+#参考:https://qiita.com/sugurutakahashi12345/items/dc23dab2613b0e6103e8
+#
